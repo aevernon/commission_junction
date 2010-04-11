@@ -10,6 +10,7 @@ begin
     gem.email = "aev@vernon.nu"
     gem.homepage = "http://github.com/aevernon/commission_junction"
     gem.authors = ["Albert Vernon"]
+    gem.add_dependency('httparty')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
