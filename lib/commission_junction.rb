@@ -29,8 +29,9 @@ class CommissionJunction
       raise ArgumentError, "You must supply your website ID.\nSee cj.com > Account > Web site Settings > PID"
     end
 
-    self.class.headers('authorization' => developer_key)
-    self.class.default_params('website-id' => website_id)
+    self_class = self.class
+    self_class.headers('authorization' => developer_key)
+    self_class.default_params('website-id' => website_id)
   end
 
   def product_search(params)
@@ -49,11 +50,7 @@ class CommissionJunction
     cj_api = response['cj_api']
     error_message = cj_api['error_message']
 
-    if error_message && error_message[0, 17] == 'Not Authenticated'
-      raise ArgumentError, "Commission Junction cannot authenticate your developer key.\nSee https://api.cj.com/sign_up.cj"
-    elsif error_message
-      raise ArgumentError, error_message
-    end
+    raise ArgumentError, error_message if error_message
 
     products = cj_api['products']
 
