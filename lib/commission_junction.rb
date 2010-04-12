@@ -39,7 +39,8 @@ class CommissionJunction
       response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params)
     end
 
-    error_message = response['cj_api']['error_message']
+    cj_api = response['cj_api']
+    error_message = cj_api['error_message']
 
     if error_message && error_message[0, 17] == 'Not Authenticated'
       raise ArgumentError, "Commission Junction cannot authenticate your developer key.\nSee https://api.cj.com/sign_up.cj"
@@ -49,7 +50,7 @@ class CommissionJunction
       raise ArgumentError, error_message
     end
 
-    products = response['cj_api']['products']
+    products = cj_api['products']
 
     @total_matched = products['total_matched'].to_i
     @records_returned = products['records_returned'].to_i
