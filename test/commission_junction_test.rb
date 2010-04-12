@@ -92,25 +92,25 @@ class CommissionJunctionTest < Test::Unit::TestCase
 
   def test_product_search_with_no_params
     assert_raise ArgumentError do
-      CommissionJunction.new('test').product_search
+      CommissionJunction.new('developer_key', 'website_id').product_search
     end
   end
 
   def test_product_search_with_nil_params
     assert_raise ArgumentError do
-      CommissionJunction.new('test').product_search(nil)
+      CommissionJunction.new('developer_key', 'website_id').product_search(nil)
     end
   end
 
   def test_product_search_with_empty_params
     assert_raise ArgumentError do
-      CommissionJunction.new('test').product_search({})
+      CommissionJunction.new('developer_key', 'website_id').product_search({})
     end
   end
 
   def test_product_search_with_non_hash_params
     assert_raise ArgumentError do
-      CommissionJunction.new('test').product_search([1, 2, 3])
+      CommissionJunction.new('developer_key', 'website_id').product_search([1, 2, 3])
     end
   end
 
