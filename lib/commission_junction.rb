@@ -86,5 +86,4 @@ class CommissionJunction
       [file, line, method]
     end
   end
-
 end

@@ -1,6 +1,6 @@
 = commission_junction
 
-Ruby wrapper for the Commission Junction product catalog search service v2 (REST)
+Ruby wrapper for the Commission Junction product catalog search service API v2 (REST)
 
 == Installation
 

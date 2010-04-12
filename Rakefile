@@ -6,7 +6,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "commission_junction"
     gem.summary = %Q{Commission Junction product catalog search (REST)}
-    gem.description = %Q{Ruby wrapper for the Commission Junction product catalog search service v2 (REST)}
+    gem.description = %Q{Ruby wrapper for the Commission Junction product catalog search service API v2 (REST)}
     gem.email = "aev@vernon.nu"
     gem.homepage = "http://github.com/aevernon/commission_junction"
     gem.authors = ["Albert Vernon"]
