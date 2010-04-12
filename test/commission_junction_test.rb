@@ -160,6 +160,12 @@ class CommissionJunctionTest < Test::Unit::TestCase
       end
 
       check_search_results(cj)
+
+      assert_nothing_raised do
+        cj.product_search('keywords' => 'no_matching_results')
+      end
+
+      check_search_results(cj)
     end
   end
 

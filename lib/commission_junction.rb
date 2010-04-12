@@ -58,7 +58,7 @@ class CommissionJunction
     @records_returned = products['records_returned'].to_i
     @page_number = products['page_number'].to_i
     @products = []
-    products['product'].each { |product| @products << Product.new(product) }
+    products['product'].each { |product| @products << Product.new(product) } if products['product']
     @products
   end
 
