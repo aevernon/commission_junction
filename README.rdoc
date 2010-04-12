@@ -11,18 +11,17 @@ Ruby wrapper for the Commission Junction product catalog search service API v2 (
  require 'rubygems'
  require 'commission_junction'
 
- # See cj.com > Account > Web site Settings > PID
- WEBSITE_ID = '????????'
-
  # See https://api.cj.com/sign_up.cj
  DEVELOPER_KEY = '????????'
+
+ # See cj.com > Account > Web site Settings > PID
+ WEBSITE_ID = '????????'
 
  cj = CommissionJunction.new(DEVELOPER_KEY, WEBSITE_ID)
 
  # See http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm
  # for the list of request and response parameters.
- cj.product_search('website-id' => WEBSITE_ID,
-                   'keywords' => '+blue +jeans',
+ cj.product_search('keywords' => '+blue +jeans',
                    'records-per-page' => '5').each do |product|
    puts product.name
    puts product.price
