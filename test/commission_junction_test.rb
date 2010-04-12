@@ -1,33 +1,51 @@
 require 'test_helper'
 
 class CommissionJunctionTest < Test::Unit::TestCase
-  def test_new_cj_with_no_key
+  def test_new_cj_with_no_params
     assert_raise ArgumentError do
       CommissionJunction.new
     end
   end
 
-  def test_new_cj_with_nil_key
+  def test_new_cj_with_one_param
     assert_raise ArgumentError do
-      CommissionJunction.new(nil)
+      CommissionJunction.new('fake')
     end
   end
 
-  def test_new_cj_with_empty_key
+  def test_new_cj_with_nil_param
     assert_raise ArgumentError do
-      CommissionJunction.new('')
+      CommissionJunction.new(nil, 'website_id')
+    end
+
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', nil)
     end
   end
 
-  def test_new_cj_with_non_string_key
+  def test_new_cj_with_empty_param
     assert_raise ArgumentError do
-      CommissionJunction.new(123456)
+      CommissionJunction.new('', 'website_id')
+    end
+
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', '')
     end
   end
 
-  def test_new_cj_with_string_key
+  def test_new_cj_with_non_string_param
+    assert_raise ArgumentError do
+      CommissionJunction.new(123456, 'website_id')
+    end
+
+    assert_nothing_raised ArgumentError do
+      CommissionJunction.new('developer_key', 123456)
+    end
+  end
+
+  def test_new_cj_with_string_param
     assert_nothing_raised do
-      assert_instance_of(CommissionJunction, CommissionJunction.new('test'))
+      assert_instance_of(CommissionJunction, CommissionJunction.new('developer_key', 'website_id'))
     end
   end
 
@@ -97,7 +115,7 @@ class CommissionJunctionTest < Test::Unit::TestCase
   end
 
   def test_product_search_with_bad_key
-    cj = CommissionJunction.new('bad')
+    cj = CommissionJunction.new('bad_key', 'website_id')
 
     assert_raise ArgumentError do
       cj.product_search('keywords' => '+some +product')
@@ -105,10 +123,10 @@ class CommissionJunctionTest < Test::Unit::TestCase
   end
 
   def test_product_search_with_keywords_non_live
-    cj = CommissionJunction.new('fake')
+    cj = CommissionJunction.new('developer_key', 'website_id')
 
     assert_nothing_raised do
-      cj.product_search('website-id' => '3893793', 'keywords' => '+blue +jeans', 'records-per-page' => '2')
+      cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
     end
 
     check_search_results(cj)
@@ -129,19 +147,16 @@ class CommissionJunctionTest < Test::Unit::TestCase
   end
 
   def test_product_search_with_keywords_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.key')
+    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
     unless File.exist?(key_file)
-      warn "Warning: #{key_file} does not exist. Put your CJ developer key in there to enable live testing."
+      warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
     else
-      cj = CommissionJunction.new(IO.read(key_file).strip)
-
-      assert_raise ArgumentError do
-        cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
-      end
+      credentials = YAML.load(File.read(key_file))
+      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
       assert_nothing_raised do
-        cj.product_search('website-id' => '3893793', 'keywords' => '+blue +jeans', 'records-per-page' => '2')
+        cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
       end
 
       check_search_results(cj)

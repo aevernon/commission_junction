@@ -16,21 +16,28 @@ class CommissionJunction
     :product_search => 'https://product-search.api.cj.com/v2/product-search'
   }
 
-  def initialize(developer_key)
+  def initialize(developer_key, website_id)
     raise ArgumentError, 'developer_key must be a String' unless developer_key.is_a?(String)
 
     unless developer_key.length > 0
       raise ArgumentError, "You must supply your developer key.\nSee https://api.cj.com/sign_up.cj"
     end
 
+    website_id = website_id.to_s
+
+    unless website_id.length > 0
+      raise ArgumentError, "You must supply your website ID.\nSee cj.com > Account > Web site Settings > PID"
+    end
+
     self.class.headers('authorization' => developer_key)
+    self.class.default_params('website-id' => website_id)
   end
 
   def product_search(params)
     raise ArgumentError, 'params must be a Hash' unless params.is_a?(Hash)
 
     unless params.size > 0
-      raise ArgumentError, "You must provide at least one request parameter, for example, \"website-id\" or \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
+      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
     end
 
     if caller_method_name == 'test_product_search_with_keywords_non_live'
@@ -44,8 +51,6 @@ class CommissionJunction
 
     if error_message && error_message[0, 17] == 'Not Authenticated'
       raise ArgumentError, "Commission Junction cannot authenticate your developer key.\nSee https://api.cj.com/sign_up.cj"
-    elsif error_message && error_message == 'Website id not specified'
-      raise ArgumentError, "You must provide your website ID.\nSee cj.com > Account > Web site Settings > PID"
     elsif error_message
       raise ArgumentError, error_message
     end
