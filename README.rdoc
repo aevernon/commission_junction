@@ -1,16 +1,45 @@
 = commission_junction
 
-Description goes here.
+Ruby wrapper for the Commission Junction product catalog search service v2 (REST)
+
+== Installation
+
+  sudo gem install commission_junction
+
+== Example
+
+ require 'rubygems'
+ require 'commission_junction'
+
+ # See cj.com > Account > Web site Settings > PID
+ WEBSITE_ID = '????????'
+
+ # See https://api.cj.com/sign_up.cj
+ DEVELOPER_KEY = '????????'
+
+ cj = CommissionJunction.new(DEVELOPER_KEY)
+
+ # See http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm
+ # for the list of request and response parameters.
+ cj.product_search('website-id' => WEBSITE_ID,
+                   'keywords' => '+blue +jeans',
+                   'records-per-page' => '5').each do |product|
+   puts product.name
+   puts product.price
+   puts product.image_url
+   puts ''
+ end
+
+== Dependencies
+
+* httparty
 
 == Note on Patches/Pull Requests
- 
+
 * Fork the project.
 * Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but
-   bump version in a commit by itself I can ignore when I pull)
+* Add tests for it. This is important so I don't break it in a future version unintentionally.
+* Commit, do not mess with Rakefile, VERSION, or history (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull).
 * Send me a pull request. Bonus points for topic branches.
 
 == Copyright
