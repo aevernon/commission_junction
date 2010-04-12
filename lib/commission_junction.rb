@@ -1,5 +1,6 @@
 require 'httparty'
 
+# Interact with CJ web services.
 class CommissionJunction
   include HTTParty
   format(:xml)
@@ -38,12 +39,14 @@ class CommissionJunction
       response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params)
     end
 
-    if response['cj_api']['error_message'] && response['cj_api']['error_message'][0, 17] == 'Not Authenticated'
+    error_message = response['cj_api']['error_message']
+
+    if error_message && error_message[0, 17] == 'Not Authenticated'
       raise ArgumentError, "Commission Junction cannot authenticate your developer key.\nSee https://api.cj.com/sign_up.cj"
-    elsif response['cj_api']['error_message'] && response['cj_api']['error_message'] == 'Website id not specified'
+    elsif error_message && error_message == 'Website id not specified'
       raise ArgumentError, "You must provide your website ID.\nSee cj.com > Account > Web site Settings > PID"
-    elsif response['cj_api']['error_message']
-      raise ArgumentError, response['cj_api']['error_message']
+    elsif error_message
+      raise ArgumentError, error_message
     end
 
     products = response['cj_api']['products']
@@ -56,6 +59,7 @@ class CommissionJunction
     @products
   end
 
+  # Represent products from a catalog search.
   class Product
     def initialize(params)
       raise ArgumentError, 'params must be a Hash' unless params.is_a?(Hash)
@@ -80,9 +84,10 @@ class CommissionJunction
 
   def parse_caller(at)
     if /^(.+?):(\d+)(?::in `(.*)')?/ =~ at
-      file = Regexp.last_match[1]
-      line = Regexp.last_match[2].to_i
-      method = Regexp.last_match[3]
+      last_match = Regexp.last_match
+      file = last_match[1]
+      line = last_match[2].to_i
+      method = last_match[3]
       [file, line, method]
     end
   end
