@@ -42,7 +42,7 @@ class CommissionJunction
     end
 
     if caller_method_name == 'test_product_search_with_keywords_non_live'
-      response = Crack::XML.parse(IO.read('test/test_response.xml'))
+      response = Crack::XML.parse(File.read('test/test_response.xml'))
     else
       response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params)
     end
