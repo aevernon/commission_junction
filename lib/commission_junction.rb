@@ -75,7 +75,7 @@ class CommissionJunction
       # Create instance variables and attribute readers on the fly.
       # Credit:  http://listlibrary.net/ruby-talk/2004/03/00sGI1cD
       params.each do |key, val|
-        raise ArgumentError, 'key must be a String' unless key.is_a?(String)
+        raise ArgumentError, "key must be a String; got #{key.class} instead" unless key.is_a?(String)
         instance_variable_set("@#{key}".intern, val)
         instance_eval %Q{ class << self ; attr_reader #{key.intern.inspect} ; end }
       end
