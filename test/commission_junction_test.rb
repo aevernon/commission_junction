@@ -155,14 +155,23 @@ class CommissionJunctionTest < Test::Unit::TestCase
       credentials = YAML.load(File.read(key_file))
       cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
+      # Zero results
       assert_nothing_raised do
-        cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
+        cj.product_search('keywords' => 'no_matching_results')
       end
 
       check_search_results(cj)
 
+      # One result
       assert_nothing_raised do
-        cj.product_search('keywords' => 'no_matching_results')
+        cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '1')
+      end
+
+      check_search_results(cj)
+
+      # Multiple results
+      assert_nothing_raised do
+        cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
       end
 
       check_search_results(cj)

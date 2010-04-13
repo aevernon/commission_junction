@@ -17,7 +17,7 @@ class CommissionJunction
   }
 
   def initialize(developer_key, website_id)
-    raise ArgumentError, 'developer_key must be a String' unless developer_key.is_a?(String)
+    raise ArgumentError, "developer_key must be a String; got #{developer_key.class} instead" unless developer_key.is_a?(String)
 
     unless developer_key.length > 0
       raise ArgumentError, "You must supply your developer key.\nSee https://api.cj.com/sign_up.cj"
@@ -35,7 +35,7 @@ class CommissionJunction
   end
 
   def product_search(params)
-    raise ArgumentError, 'params must be a Hash' unless params.is_a?(Hash)
+    raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
 
     unless params.size > 0
       raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
@@ -58,14 +58,18 @@ class CommissionJunction
     @records_returned = products['records_returned'].to_i
     @page_number = products['page_number'].to_i
     @products = []
-    products['product'].each { |product| @products << Product.new(product) } if products['product']
+
+    product = products['product']
+    product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
+    product.each { |product| @products << Product.new(product) } if product
+
     @products
   end
 
   # Represent products from a catalog search.
   class Product
     def initialize(params)
-      raise ArgumentError, 'params must be a Hash' unless params.is_a?(Hash)
+      raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
       raise ArgumentError, 'Expecting at least one parameter' unless params.size > 0
 
       # Create instance variables and attribute readers on the fly.
