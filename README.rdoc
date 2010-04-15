@@ -22,6 +22,9 @@ Ruby wrapper for the Commission Junction product catalog search service API v2 (
  # See http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm
  # for the list of request and response parameters.
  cj.product_search('keywords' => '+blue +jeans',
+                   'advertiser-ids' => 'joined',
+                   'serviceable-area' => 'us',
+                   'currency' => 'usd',
                    'records-per-page' => '5').each do |product|
    puts product.name
    puts product.price
