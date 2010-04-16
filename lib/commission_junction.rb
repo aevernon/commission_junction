@@ -60,11 +60,10 @@ class CommissionJunction
       @total_matched = products['total_matched'].to_i
       @records_returned = products['records_returned'].to_i
       @page_number = products['page_number'].to_i
-      @products = []
 
       product = products['product']
       product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
-      product.each { |p| @products << Product.new(p) } if product
+      product.each { |item| @products << Product.new(item) } if product
     rescue Timeout::Error
       @total_matched = @records_returned = @page_number = 0
     end
