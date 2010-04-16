@@ -16,18 +16,16 @@ class CommissionJunction
     :product_search => 'https://product-search.api.cj.com/v2/product-search'
   }
 
-  def initialize(developer_key, website_id)
+  def initialize(developer_key, website_id, timeout = 10)
     raise ArgumentError, "developer_key must be a String; got #{developer_key.class} instead" unless developer_key.is_a?(String)
-
-    unless developer_key.length > 0
-      raise ArgumentError, "You must supply your developer key.\nSee https://api.cj.com/sign_up.cj"
-    end
+    raise ArgumentError, "You must supply your developer key.\nSee https://api.cj.com/sign_up.cj" unless developer_key.length > 0
 
     website_id = website_id.to_s
+    raise ArgumentError, "You must supply your website ID.\nSee cj.com > Account > Web site Settings > PID" unless website_id.length > 0
 
-    unless website_id.length > 0
-      raise ArgumentError, "You must supply your website ID.\nSee cj.com > Account > Web site Settings > PID"
-    end
+    raise ArgumentError, "timeout must be a Fixnum; got #{timeout.class} instead" unless timeout.is_a?(Fixnum)
+    raise ArgumentError, "timeout must be > 0; got #{timeout} instead" unless timeout > 0
+    @timeout = timeout
 
     self_class = self.class
     self_class.headers('authorization' => developer_key)
@@ -47,7 +45,7 @@ class CommissionJunction
       if caller_method_name == 'test_product_search_with_keywords_non_live'
         response = Crack::XML.parse(File.read('test/test_response.xml'))
       else
-        response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params)
+        response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params, :timeout => @timeout)
       end
 
       cj_api = response['cj_api']

@@ -21,6 +21,10 @@ class CommissionJunctionTest < Test::Unit::TestCase
     assert_raise ArgumentError do
       CommissionJunction.new('developer_key', nil)
     end
+
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id', nil)
+    end
   end
 
   def test_new_cj_with_empty_param
@@ -43,9 +47,29 @@ class CommissionJunctionTest < Test::Unit::TestCase
     end
   end
 
-  def test_new_cj_with_string_param
+  def test_new_cj_with_non_fixnum_timeout
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id', '10')
+    end
+  end
+
+  def test_new_cj_with_non_positive_timeout
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id', 0)
+    end
+
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id', -1)
+    end
+  end
+
+  def test_new_cj_with_correct_types
     assert_nothing_raised do
       assert_instance_of(CommissionJunction, CommissionJunction.new('developer_key', 'website_id'))
+    end
+
+    assert_nothing_raised do
+      assert_instance_of(CommissionJunction, CommissionJunction.new('developer_key', 'website_id', 50))
     end
   end
 
@@ -172,6 +196,15 @@ class CommissionJunctionTest < Test::Unit::TestCase
       # Multiple results
       assert_nothing_raised do
         cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
+      end
+
+      check_search_results(cj)
+
+      # Short timeout
+      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
+
+      assert_nothing_raised do
+        cj.product_search('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
       end
 
       check_search_results(cj)
