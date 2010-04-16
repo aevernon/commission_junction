@@ -41,27 +41,33 @@ class CommissionJunction
       raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
     end
 
-    if caller_method_name == 'test_product_search_with_keywords_non_live'
-      response = Crack::XML.parse(File.read('test/test_response.xml'))
-    else
-      response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params)
-    end
-
-    cj_api = response['cj_api']
-    error_message = cj_api['error_message']
-
-    raise ArgumentError, error_message if error_message
-
-    products = cj_api['products']
-
-    @total_matched = products['total_matched'].to_i
-    @records_returned = products['records_returned'].to_i
-    @page_number = products['page_number'].to_i
     @products = []
 
-    product = products['product']
-    product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
-    product.each { |product| @products << Product.new(product) } if product
+    begin
+      if caller_method_name == 'test_product_search_with_keywords_non_live'
+        response = Crack::XML.parse(File.read('test/test_response.xml'))
+      else
+        response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params)
+      end
+
+      cj_api = response['cj_api']
+      error_message = cj_api['error_message']
+
+      raise ArgumentError, error_message if error_message
+
+      products = cj_api['products']
+
+      @total_matched = products['total_matched'].to_i
+      @records_returned = products['records_returned'].to_i
+      @page_number = products['page_number'].to_i
+      @products = []
+
+      product = products['product']
+      product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
+      product.each { |p| @products << Product.new(p) } if product
+    rescue Timeout::Error
+      @total_matched = @records_returned = @page_number = 0
+    end
 
     @products
   end
