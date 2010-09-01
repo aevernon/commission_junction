@@ -9,11 +9,12 @@ class CommissionJunction
   attr_reader :total_matched,
               :records_returned,
               :page_number,
-              :products
+              :cj_objects
 
-  WEB_SERVICE_URIS =
+  WEB_SERVICE_URIS = 
   {
-    :product_search => 'https://product-search.api.cj.com/v2/product-search'
+    :product_search => 'https://product-search.api.cj.com/v2/product-search',
+    :advertiser_lookup => 'https://advertiser-lookup.api.cj.com/v3/advertiser-lookup'
   }
 
   def initialize(developer_key, website_id, timeout = 10)
@@ -29,7 +30,41 @@ class CommissionJunction
 
     self_class = self.class
     self_class.headers('authorization' => developer_key)
-    self_class.default_params('website-id' => website_id)
+    # This causes the Invalid Key error. We don't need this anymore
+    #self_class.default_params('website-id' => website_id)
+  end
+
+  def advertiser_lookup(params = { 'advertiser-ids' => 'joined', 'records-per-page' => '5' })
+    raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
+
+    unless params.size > 0
+      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/advertiser_lookup_service_rest.htm"
+    end
+
+    @cj_objects = []
+    begin
+      #response = self.class.get("https://advertiser-lookup.api.cj.com/v3/advertiser-lookup?advertiser-ids=#{advertiser_ids}")
+      response = self.class.get(WEB_SERVICE_URIS[:advertiser_lookup], :query => params)
+      cj_api = response['cj_api']
+      error_message = cj_api['error_message']
+
+      raise ArgumentError, error_message if error_message
+
+      advertisers = cj_api['advertisers']
+
+
+      @total_matched = advertisers['total_matched'].to_i
+      @records_returned = advertisers['records_returned'].to_i
+      @page_number = advertisers['page_number'].to_i
+
+      advertiser = advertisers['advertiser']
+      advertiser = [advertiser] if advertiser.is_a?(Hash) # If we got exactly one result, put it in an array.
+      advertiser.each { |item| @cj_objects << Advertiser.new(item) } if advertiser
+    rescue Timeout::Error
+      @total_matched = @records_returned = @page_number = 0
+    end
+
+    @cj_objects
   end
 
   def product_search(params)
@@ -39,7 +74,7 @@ class CommissionJunction
       raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
     end
 
-    @products = []
+    @cj_objects = []
 
     begin
       if caller_method_name == 'test_product_search_with_keywords_non_live'
@@ -61,16 +96,15 @@ class CommissionJunction
 
       product = products['product']
       product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
-      product.each { |item| @products << Product.new(item) } if product
+      product.each { |item| @cj_objects << Product.new(item) } if product
     rescue Timeout::Error
       @total_matched = @records_returned = @page_number = 0
     end
 
-    @products
+    @cj_objects
   end
 
-  # Represent products from a catalog search.
-  class Product
+  class CjObject
     def initialize(params)
       raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
       raise ArgumentError, 'Expecting at least one parameter' unless params.size > 0
@@ -83,6 +117,13 @@ class CommissionJunction
         instance_eval %Q{ class << self ; attr_reader #{key.intern.inspect} ; end }
       end
     end
+  end
+
+  # Represent products from a catalog search.
+  class Product < CjObject
+  end
+
+  class Advertiser < CjObject
   end
 
   private
