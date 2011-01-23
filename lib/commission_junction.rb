@@ -1,5 +1,17 @@
 require 'httparty'
 
+# Silence peer certificate warnings from Net::HTTP.
+# Credit:  http://www.5dollarwhitebox.org/drupal/node/64
+class Net::HTTP
+  alias_method :old_initialize, :initialize
+
+  def initialize(*args)
+    old_initialize(*args)
+    @ssl_context = OpenSSL::SSL::SSLContext.new
+    @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  end
+end
+
 # Interact with CJ web services.
 class CommissionJunction
   include HTTParty
@@ -23,6 +35,7 @@ class CommissionJunction
 
     website_id = website_id.to_s
     raise ArgumentError, "You must supply your website ID.\nSee cj.com > Account > Web site Settings > PID" unless website_id.length > 0
+    @website_id = website_id
 
     raise ArgumentError, "timeout must be a Fixnum; got #{timeout.class} instead" unless timeout.is_a?(Fixnum)
     raise ArgumentError, "timeout must be > 0; got #{timeout} instead" unless timeout > 0
@@ -30,8 +43,6 @@ class CommissionJunction
 
     self_class = self.class
     self_class.headers('authorization' => developer_key)
-    # This causes the Invalid Key error. We don't need this anymore
-    #self_class.default_params('website-id' => website_id)
   end
 
   def advertiser_lookup(params = { 'advertiser-ids' => 'joined', 'records-per-page' => '5' })
@@ -43,7 +54,6 @@ class CommissionJunction
 
     @cj_objects = []
     begin
-      #response = self.class.get("https://advertiser-lookup.api.cj.com/v3/advertiser-lookup?advertiser-ids=#{advertiser_ids}")
       response = self.class.get(WEB_SERVICE_URIS[:advertiser_lookup], :query => params)
       cj_api = response['cj_api']
       error_message = cj_api['error_message']
@@ -51,7 +61,6 @@ class CommissionJunction
       raise ArgumentError, error_message if error_message
 
       advertisers = cj_api['advertisers']
-
 
       @total_matched = advertisers['total_matched'].to_i
       @records_returned = advertisers['records_returned'].to_i
@@ -73,6 +82,8 @@ class CommissionJunction
     unless params.size > 0
       raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
     end
+
+    params['website-id'] = @website_id
 
     @cj_objects = []
 

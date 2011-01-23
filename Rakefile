@@ -5,11 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "commission_junction"
-    gem.summary = %Q{Commission Junction product catalog search (REST)}
-    gem.description = %Q{Ruby wrapper for the Commission Junction product catalog search service API v2 (REST)}
+    gem.summary = %Q{Commission Junction web services APIs (REST)}
+    gem.description = %Q{Ruby wrapper for the Commission Junction web services APIs (REST)}
     gem.email = "aev@vernon.nu"
     gem.homepage = "http://github.com/aevernon/commission_junction"
-    gem.authors = ["Albert Vernon"]
+    gem.authors = ["Albert Vernon", "C.J. Sanders"]
     gem.add_dependency('httparty')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

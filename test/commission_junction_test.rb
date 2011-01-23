@@ -170,46 +170,46 @@ class CommissionJunctionTest < Test::Unit::TestCase
     assert_equal('163.0', cj.cj_objects.last.price)
   end
 
- # def test_product_search_with_keywords_live
- #   key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+  def test_product_search_with_keywords_live
+    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
- #   unless File.exist?(key_file)
- #     warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
- #   else
- #     credentials = YAML.load(File.read(key_file))
- #     cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    unless File.exist?(key_file)
+      warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
+    else
+      credentials = YAML.load(File.read(key_file))
+      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
- #     # Zero results
- #     assert_nothing_raised do
- #       cj.product_search('keywords' => 'no_matching_results')
- #     end
+      # Zero results
+      assert_nothing_raised do
+	cj.product_search('keywords' => 'no_matching_results')
+      end
 
- #     check_search_results(cj)
+      check_search_results(cj)
 
- #     # One result
- #     assert_nothing_raised do
- #       cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '1')
- #     end
+      # One result
+      assert_nothing_raised do
+	cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '1')
+      end
 
- #     check_search_results(cj)
+      check_search_results(cj)
 
- #     # Multiple results
- #     assert_nothing_raised do
- #       cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
- #     end
+      # Multiple results
+      assert_nothing_raised do
+	cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
+      end
 
- #     check_search_results(cj)
+      check_search_results(cj)
 
- #     # Short timeout
- #     cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
+      # Short timeout
+      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
 
- #     assert_nothing_raised do
- #       cj.product_search('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
- #     end
+      assert_nothing_raised do
+	cj.product_search('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
+      end
 
- #     check_search_results(cj)
- #   end
- # end
+      check_search_results(cj)
+    end
+  end
 
   def check_search_results(results)
     assert_instance_of(Fixnum, results.total_matched)
@@ -240,7 +240,12 @@ class CommissionJunctionTest < Test::Unit::TestCase
     end
   end
 
-  
+  def test_product_search_with_no_params
+    assert_raise ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id').advertiser_lookup({})
+    end
+  end
+
   def test_advertiser_search_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
@@ -250,11 +255,9 @@ class CommissionJunctionTest < Test::Unit::TestCase
       credentials = YAML.load(File.read(key_file))
       cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
-
       # One result
       assert_nothing_raised do
         result = cj.advertiser_lookup('advertiser-ids' => 'joined', 'page-number' => '1')
-        #The New York Pass
       end
 
       check_advertiser_lookup_results(cj)
@@ -298,5 +301,4 @@ class CommissionJunctionTest < Test::Unit::TestCase
       assert_respond_to(advertiser, :three_month_epc)
     end
   end
-  
 end

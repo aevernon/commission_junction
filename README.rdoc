@@ -1,6 +1,6 @@
 = commission_junction
 
-Ruby wrapper for the Commission Junction product catalog search service API v2 (REST)
+Ruby wrapper for the Commission Junction web services APIs (REST)
 
 == Installation
 
@@ -32,6 +32,17 @@ Ruby wrapper for the Commission Junction product catalog search service API v2 (
    puts ''
  end
 
+ # See http://help.cj.com/en/web_services/advertiser_lookup_service_rest.htm
+ # for the list of request and response parameters.
+ cj.advertiser_lookup('keywords' => '+used +books'
+		      'advertiser-ids' => 'joined',
+		      'records-per-page' => '5').each do |advertiser|
+   puts advertiser.advertiser_name
+   puts advertiser.network_rank
+   puts advertiser.program_url
+   puts ''
+ end
+
 == Dependencies
 
 * httparty
@@ -41,9 +52,10 @@ Ruby wrapper for the Commission Junction product catalog search service API v2 (
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a future version unintentionally.
-* Commit, do not mess with Rakefile, VERSION, or history (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull).
+* Commit. Do not mess with Rakefile, VERSION, or history (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull).
 * Send me a pull request. Bonus points for topic branches.
+* This project uses Jeweler to manage its RubyGem. You do not need to create a separate gemspec file.
 
 == Copyright
 
-Copyright (c) 2010 Albert Vernon. See LICENSE for details.
+Copyright (c) 2011 Albert Vernon. See LICENSE for details.
