@@ -301,4 +301,17 @@ class CommissionJunctionTest < Test::Unit::TestCase
       assert_respond_to(advertiser, :three_month_epc)
     end
   end
+
+  def test_categories_live
+    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+
+    unless File.exist?(key_file)
+      warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
+    else
+      credentials = YAML.load(File.read(key_file))
+      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+
+      assert cj.categories.size > 0
+    end
+  end
 end

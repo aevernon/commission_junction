@@ -43,6 +43,8 @@ Ruby wrapper for the Commission Junction web services APIs (REST)
    puts ''
  end
 
+ puts cj.categories
+
 == Dependencies
 
 * httparty

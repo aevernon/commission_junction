@@ -9,7 +9,7 @@ begin
     gem.description = %Q{Ruby wrapper for the Commission Junction web services APIs (REST)}
     gem.email = "aev@vernon.nu"
     gem.homepage = "http://github.com/aevernon/commission_junction"
-    gem.authors = ["Albert Vernon", "C.J. Sanders"]
+    gem.authors = ["Albert Vernon", "C.J. Sanders", "Michael Nutt"]
     gem.add_dependency('httparty')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end

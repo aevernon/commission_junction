@@ -26,7 +26,8 @@ class CommissionJunction
   WEB_SERVICE_URIS = 
   {
     :product_search => 'https://product-search.api.cj.com/v2/product-search',
-    :advertiser_lookup => 'https://advertiser-lookup.api.cj.com/v3/advertiser-lookup'
+    :advertiser_lookup => 'https://advertiser-lookup.api.cj.com/v3/advertiser-lookup',
+    :categories => 'https://support-services.api.cj.com/v2/categories'
   }
 
   def initialize(developer_key, website_id, timeout = 10)
@@ -43,6 +44,21 @@ class CommissionJunction
 
     self_class = self.class
     self_class.headers('authorization' => developer_key)
+  end
+
+  def categories(params={})
+    raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
+
+    params = {'locale' => 'en'}.merge(params)
+
+    response = self.class.get(WEB_SERVICE_URIS[:categories], :query => params, :timeout => @timeout)
+
+    cj_api = response['cj_api']
+    error_message = cj_api['error_message']
+
+    raise ArgumentError, error_message if error_message
+
+    @categories = cj_api['categories']['category']
   end
 
   def advertiser_lookup(params = { 'advertiser-ids' => 'joined', 'records-per-page' => '5' })
