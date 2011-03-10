@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    commission_junction (1.3.0)
+      httparty (~> 0.7)
+      httparty
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    crack (0.1.8)
+    httparty (0.7.4)
+      crack (= 0.1.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  commission_junction!
