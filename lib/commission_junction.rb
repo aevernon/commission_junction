@@ -1,4 +1,5 @@
 require 'httparty'
+require 'crack'
 
 # Silence peer certificate warnings from Net::HTTP.
 # Credit:  http://www.5dollarwhitebox.org/drupal/node/64
@@ -104,7 +105,7 @@ class CommissionJunction
     @cj_objects = []
 
     begin
-      if caller_method_name == 'test_product_search_with_keywords_non_live'
+      if caller_method_name =~ /test_product_search_with_keywords_non_live/
         response = Crack::XML.parse(File.read('test/test_response.xml'))
       else
         response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params, :timeout => @timeout)

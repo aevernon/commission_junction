@@ -11,6 +11,7 @@ begin
     gem.homepage = "http://github.com/aevernon/commission_junction"
     gem.authors = ["Albert Vernon", "C.J. Sanders", "Michael Nutt"]
     gem.add_dependency('httparty')
+    gem.add_dependency('crack')
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
