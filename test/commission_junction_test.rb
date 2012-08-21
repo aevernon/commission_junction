@@ -173,42 +173,40 @@ class CommissionJunctionTest < Test::Unit::TestCase
   def test_product_search_with_keywords_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
-    unless File.exist?(key_file)
-      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
-    else
-      credentials = YAML.load(File.read(key_file))
-      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
 
-      # Zero results
-      assert_nothing_raised do
-	cj.product_search('keywords' => 'no_matching_results')
-      end
+    credentials = YAML.load(File.read(key_file))
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
-      check_search_results(cj)
-
-      # One result
-      assert_nothing_raised do
-	cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '1')
-      end
-
-      check_search_results(cj)
-
-      # Multiple results
-      assert_nothing_raised do
-	cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
-      end
-
-      check_search_results(cj)
-
-      # Short timeout
-      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
-
-      assert_nothing_raised do
-	cj.product_search('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
-      end
-
-      check_search_results(cj)
+    # Zero results
+    assert_nothing_raised do
+      cj.product_search('keywords' => 'no_matching_results')
     end
+
+    check_search_results(cj)
+
+    # One result
+    assert_nothing_raised do
+      cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '1')
+    end
+
+    check_search_results(cj)
+
+    # Multiple results
+    assert_nothing_raised do
+      cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
+    end
+
+    check_search_results(cj)
+
+    # Short timeout
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
+
+    assert_nothing_raised do
+      cj.product_search('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
+    end
+
+    check_search_results(cj)
   end
 
   def check_search_results(results)
@@ -249,35 +247,33 @@ class CommissionJunctionTest < Test::Unit::TestCase
   def test_advertiser_search_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
-    unless File.exist?(key_file)
-      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
-    else
-      credentials = YAML.load(File.read(key_file))
-      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
+    
+    credentials = YAML.load(File.read(key_file))
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
-      # One result
-      assert_nothing_raised do
-        cj.advertiser_lookup('advertiser-ids' => 'joined', 'page-number' => '1')
-      end
-
-      check_advertiser_lookup_results(cj)
-
-      # Multiple results
-      assert_nothing_raised do
-        cj.advertiser_lookup('keywords' => '+blue +jeans', 'records-per-page' => '2')
-      end
-
-      check_advertiser_lookup_results(cj)
-
-      # Short timeout
-      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
-
-      assert_nothing_raised do
-        cj.advertiser_lookup('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
-      end
-
-      check_advertiser_lookup_results(cj)
+    # One result
+    assert_nothing_raised do
+      cj.advertiser_lookup('advertiser-ids' => 'joined', 'page-number' => '1')
     end
+
+    check_advertiser_lookup_results(cj)
+
+    # Multiple results
+    assert_nothing_raised do
+      cj.advertiser_lookup('keywords' => '+blue +jeans', 'records-per-page' => '2')
+    end
+
+    check_advertiser_lookup_results(cj)
+
+    # Short timeout
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
+
+    assert_nothing_raised do
+      cj.advertiser_lookup('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
+    end
+
+    check_advertiser_lookup_results(cj)
   end
 
   def check_advertiser_lookup_results(results)
@@ -305,31 +301,27 @@ class CommissionJunctionTest < Test::Unit::TestCase
   def test_categories_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
-    unless File.exist?(key_file)
-      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
-    else
-      credentials = YAML.load(File.read(key_file))
-      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
 
-      assert cj.categories.size > 0
-    end
+    credentials = YAML.load(File.read(key_file))
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+
+    assert cj.categories.size > 0
   end
 
   def test_commissions_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
-    unless File.exist?(key_file)
-      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
-    else
-      credentials = YAML.load(File.read(key_file))
-      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
 
-      assert_nothing_raised do
-        cj.commissions('date-type' => 'event')
-      end
+    credentials = YAML.load(File.read(key_file))
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
-      check_commission_lookup_results(cj)
+    assert_nothing_raised do
+      cj.commissions('date-type' => 'event')
     end
+
+    check_commission_lookup_results(cj)
   end
 
   def check_commission_lookup_results(results)
