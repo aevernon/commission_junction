@@ -24,11 +24,12 @@ class CommissionJunction
               :page_number,
               :cj_objects
 
-  WEB_SERVICE_URIS = 
+  WEB_SERVICE_URIS =
   {
-    :product_search => 'https://product-search.api.cj.com/v2/product-search',
+    :product_search    => 'https://product-search.api.cj.com/v2/product-search',
     :advertiser_lookup => 'https://advertiser-lookup.api.cj.com/v3/advertiser-lookup',
-    :categories => 'https://support-services.api.cj.com/v2/categories'
+    :categories        => 'https://support-services.api.cj.com/v2/categories',
+    :commissions       => 'https://commission-detail.api.cj.com/v3/commissions'
   }
 
   def initialize(developer_key, website_id, timeout = 10)
@@ -132,6 +133,34 @@ class CommissionJunction
     @cj_objects
   end
 
+  def commissions(params)
+    raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
+
+    @cj_objects = []
+
+    begin
+      response = self.class.get(WEB_SERVICE_URIS[:commissions], :query => params)
+      cj_api = response['cj_api']
+      error_message = cj_api['error_message']
+
+      raise ArgumentError, error_message if error_message
+
+      commissions = cj_api['commissions']
+
+      @total_matched = commissions['total_matched'].to_i
+      @records_returned = commissions['records_returned'].to_i
+      @page_number = commissions['page_number'].to_i
+
+      commission = commissions['commission']
+      commission = [commission] if commission.is_a?(Hash) # If we got exactly one result, put it in an array.
+      commission.each { |item| @cj_objects << Commission.new(item) } if commission
+    rescue Timeout::Error
+      @total_matched = @records_returned = @page_number = 0
+    end
+
+    @cj_objects
+  end
+
   class CjObject
     def initialize(params)
       raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
@@ -152,6 +181,9 @@ class CommissionJunction
   end
 
   class Advertiser < CjObject
+  end
+
+  class Commission < CjObject
   end
 
   private

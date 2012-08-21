@@ -1,23 +1,8 @@
 require 'rubygems'
 require 'rake'
 
-begin
-  require 'jeweler'
-  Jeweler::Tasks.new do |gem|
-    gem.name = "commission_junction"
-    gem.summary = %Q{Commission Junction web services APIs (REST)}
-    gem.description = %Q{Ruby wrapper for the Commission Junction web services APIs (REST)}
-    gem.email = "aev@vernon.nu"
-    gem.homepage = "http://github.com/aevernon/commission_junction"
-    gem.authors = ["Albert Vernon", "C.J. Sanders", "Michael Nutt"]
-    gem.add_dependency('httparty')
-    gem.add_dependency('crack')
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-  end
-  Jeweler::GemcutterTasks.new
-rescue LoadError
-  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
-end
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
 require 'rake/testtask'
 Rake::TestTask.new(:test) do |test|
@@ -39,11 +24,9 @@ rescue LoadError
   end
 end
 
-task :test => :check_dependencies
-
 task :default => :test
 
-require 'rake/rdoctask'
+require 'rdoc/task'
 Rake::RDocTask.new do |rdoc|
   if File.exist?('VERSION')
     version = File.read('VERSION')

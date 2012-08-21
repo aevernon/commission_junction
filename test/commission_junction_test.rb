@@ -174,7 +174,7 @@ class CommissionJunctionTest < Test::Unit::TestCase
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
     unless File.exist?(key_file)
-      warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
+      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
     else
       credentials = YAML.load(File.read(key_file))
       cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
@@ -250,14 +250,14 @@ class CommissionJunctionTest < Test::Unit::TestCase
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
     unless File.exist?(key_file)
-      warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
+      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
     else
       credentials = YAML.load(File.read(key_file))
       cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
       # One result
       assert_nothing_raised do
-        result = cj.advertiser_lookup('advertiser-ids' => 'joined', 'page-number' => '1')
+        cj.advertiser_lookup('advertiser-ids' => 'joined', 'page-number' => '1')
       end
 
       check_advertiser_lookup_results(cj)
@@ -306,12 +306,60 @@ class CommissionJunctionTest < Test::Unit::TestCase
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
     unless File.exist?(key_file)
-      warn "Warning: #{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
+      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
     else
       credentials = YAML.load(File.read(key_file))
       cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
       assert cj.categories.size > 0
+    end
+  end
+
+  def test_commissions_live
+    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+
+    unless File.exist?(key_file)
+      skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing."
+    else
+      credentials = YAML.load(File.read(key_file))
+      cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+
+      assert_nothing_raised do
+        cj.commissions('date-type' => 'event')
+      end
+
+      check_commission_lookup_results(cj)
+    end
+  end
+
+  def check_commission_lookup_results(results)
+    assert_instance_of(Fixnum, results.total_matched)
+    assert_instance_of(Fixnum, results.records_returned)
+    assert_instance_of(Fixnum, results.page_number)
+    assert_instance_of(Array, results.cj_objects)
+
+    results.cj_objects.each do |commission|
+      assert_instance_of(CommissionJunction::Commission, commission)
+      assert_respond_to(commission, :action_status)
+      assert_respond_to(commission, :action_type)
+      assert_respond_to(commission, :action_tracker_id)
+      assert_respond_to(commission, :action_tracker_name)
+      assert_respond_to(commission, :aid)
+      assert_respond_to(commission, :commission_id)
+      assert_respond_to(commission, :country)
+      assert_respond_to(commission, :event_date)
+      assert_respond_to(commission, :locking_date)
+      assert_respond_to(commission, :order_id)
+      assert_respond_to(commission, :original)
+      assert_respond_to(commission, :original_action_id)
+      assert_respond_to(commission, :posting_date)
+      assert_respond_to(commission, :website_id)
+      assert_respond_to(commission, :cid)
+      assert_respond_to(commission, :advertiser_name)
+      assert_respond_to(commission, :commission_amount)
+      assert_respond_to(commission, :order_discount)
+      assert_respond_to(commission, :sid)
+      assert_respond_to(commission, :sale_amount)
     end
   end
 end
