@@ -48,7 +48,7 @@ class CommissionJunction
     self_class.headers('authorization' => developer_key)
   end
 
-  def categories(params={})
+  def categories(params = {})
     raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
 
     params = {'locale' => 'en'}.merge(params)
@@ -133,8 +133,10 @@ class CommissionJunction
     @cj_objects
   end
 
-  def commissions(params)
+  def commissions(params = {})
     raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
+
+    params = {'date-type' => 'event'}.merge(params)
 
     @cj_objects = []
 
@@ -176,7 +178,6 @@ class CommissionJunction
     end
   end
 
-  # Represent products from a catalog search.
   class Product < CjObject
   end
 

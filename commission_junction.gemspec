@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version = "1.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Albert Vernon", "C.J. Sanders", "Michael Nutt", "Jean-Sebastien Boulanger"]
+  s.authors = ["Albert Vernon"]
   s.date = "2012-08-21"
   s.description = "Ruby wrapper for the Commission Junction web services APIs (REST)"
   s.email = "aev@vernon.nu"

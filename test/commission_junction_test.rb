@@ -318,7 +318,13 @@ class CommissionJunctionTest < Test::Unit::TestCase
     cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
     assert_nothing_raised do
-      cj.commissions('date-type' => 'event')
+      cj.commissions
+    end
+
+    check_commission_lookup_results(cj)
+
+    assert_nothing_raised do
+      cj.commissions('date-type' => 'posting')
     end
 
     check_commission_lookup_results(cj)

@@ -49,7 +49,7 @@ Ruby wrapper for the Commission Junction web services APIs (REST)
 
  # See http://help.cj.com/en/web_services/Commission_Detail_Service.htm
  # for the list of request and response parameters.
- cj.commissions('date-type' => 'event').each do |commission|
+ cj.commissions.each do |commission|
    puts commission.action_type
    puts commission.aid
    puts commission.commission_id
@@ -72,6 +72,12 @@ Ruby wrapper for the Commission Junction web services APIs (REST)
 * Add tests for it. This is important so I don't break it in a future version unintentionally.
 * Commit. Do not mess with Rakefile or history (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull).
 * Send me a pull request.
+
+== Contributors
+
+* {C.J. Sanders}[https://github.com/cjsanders]
+* {Michael Nutt}[https://github.com/mnutt]
+* {Jean-Sebastien Boulanger}[https://github.com/jsboulanger]
 
 == Copyright
 
