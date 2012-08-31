@@ -2,25 +2,24 @@
 
 Gem::Specification.new do |s|
   s.name = "commission_junction"
-  s.version = "1.3.0"
+  s.version = "1.4.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Albert Vernon"]
-  s.date = "2012-08-21"
+  s.date = "2012-08-31"
   s.description = "Ruby wrapper for the Commission Junction web services APIs (REST)"
   s.email = "aev@vernon.nu"
   s.extra_rdoc_files = [
     "LICENSE",
-    "README.rdoc"
+    "README.md"
   ]
   s.files = [
     "LICENSE",
-    "README.rdoc",
+    "README.md",
     "Rakefile",
     "lib/commission_junction.rb",
     "test/commission_junction_test.rb",
     "test/test_helper.rb",
-    "test/test_response.xml"
   ]
   s.homepage = "http://github.com/aevernon/commission_junction"
   s.require_paths = ["lib"]
