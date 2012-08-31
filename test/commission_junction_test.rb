@@ -146,30 +146,6 @@ class CommissionJunctionTest < Test::Unit::TestCase
     end
   end
 
-  def test_product_search_with_keywords_non_live
-    cj = CommissionJunction.new('developer_key', 'website_id')
-
-    assert_nothing_raised do
-      cj.product_search('keywords' => '+blue +jeans', 'records-per-page' => '2')
-    end
-
-    check_search_results(cj)
-
-    assert_equal(10726, cj.total_matched)
-    assert_equal(2, cj.records_returned)
-    assert_equal(1, cj.page_number)
-
-    assert_equal('Rockstar Motocross Jeans Blue', cj.cj_objects.first.name)
-    assert_equal('Buy Rockstar Motocross Jeans Blue at BlueBee.com', cj.cj_objects.first.description)
-    assert_equal('http://www.bluebee.com/cImages/Website_0/type_236/RST01233_255266.jpg', cj.cj_objects.first.image_url.strip)
-    assert_equal('209.0', cj.cj_objects.first.price)
-
-    assert_equal('***James Jeans*** Twiggy Aged Blue', cj.cj_objects.last.name)
-    assert_equal('Buy ***James Jeans*** Twiggy Aged Blue at BlueBee.com', cj.cj_objects.last.description)
-    assert_equal('http://www.bluebee.com/cImages/Website_0/type_236/JME01383_263394.jpg', cj.cj_objects.last.image_url.strip)
-    assert_equal('163.0', cj.cj_objects.last.price)
-  end
-
   def test_product_search_with_keywords_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
