@@ -1,3 +1,4 @@
+require 'commission_junction/version'
 require 'httparty'
 
 # Silence peer certificate warnings from Net::HTTP.

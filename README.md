@@ -1,15 +1,22 @@
-commission_junction
-===================
+# commission_junction
 
 Ruby wrapper for the Commission Junction web services APIs (REST)
 
-Installation
-------------
+## Installation
 
-`sudo gem install commission_junction`
+Add this line to your application's Gemfile:
 
-Example
--------
+`gem 'commission_junction'`
+
+And then execute
+
+`bundle`
+
+Or install it yourself as:
+
+`gem install commission_junction`
+
+## Example
 
 ```ruby
 require 'rubygems'
@@ -65,27 +72,23 @@ cj.commissions.each do |commission|
 end
 ```
 
-Dependencies
-------------
+## Dependencies
 
 * httparty
 
-Contributing
-------------
+## Contributing
 
 * Feel free to file a bug report or enhancement request, even if you don't have time to submit a patch.
 * Please try to include a test for any patch you submit. If you don't include a test, I'll have to write one, and it'll take longer to get your code in.
 * Remember to send me a pull request.
 
-Authors
--------
+## Authors
 
 * [Albert Vernon](https://github.com/aevernon)
 * [C.J. Sanders](https://github.com/cjsanders)
 * [Michael Nutt](https://github.com/mnutt)
 * [Jean-Sebastien Boulanger](https://github.com/jsboulanger)
 
-Copyright
----------
+## Copyright
 
 Copyright (c) 2012 Albert Vernon. See LICENSE for details.
