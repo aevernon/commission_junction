@@ -214,19 +214,20 @@ class CommissionJunctionTest < Test::Unit::TestCase
     end
   end
 
-  def test_product_search_with_no_params
-    assert_raise ArgumentError do
-      CommissionJunction.new('developer_key', 'website_id').advertiser_lookup({})
-    end
-  end
-
-  def test_advertiser_search_live
+  def test_advertiser_lookup_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
     skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
     
     credentials = YAML.load(File.read(key_file))
     cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+
+    # Use default lookup parameters.
+    assert_nothing_raised do
+      cj.advertiser_lookup
+    end
+
+    check_advertiser_lookup_results(cj)
 
     # One result
     assert_nothing_raised do

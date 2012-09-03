@@ -62,14 +62,13 @@ class CommissionJunction
     @categories = cj_api['categories']['category']
   end
 
-  def advertiser_lookup(params = { 'advertiser-ids' => 'joined', 'records-per-page' => '5' })
+  def advertiser_lookup(params = {})
     raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
 
-    unless params.size > 0
-      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/advertiser_lookup_service_rest.htm"
-    end
+    params = {'advertiser-ids' => 'joined'}.merge(params)
 
     @cj_objects = []
+
     begin
       response = self.class.get(WEB_SERVICE_URIS[:advertiser_lookup], :query => params)
       cj_api = response['cj_api']
