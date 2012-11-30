@@ -27,6 +27,7 @@ class CommissionJunction
   WEB_SERVICE_URIS =
   {
     :product_search    => 'https://product-search.api.cj.com/v2/product-search',
+    :link_search       => 'https://link-search.api.cj.com/v2/link-search',
     :advertiser_lookup => 'https://advertiser-lookup.api.cj.com/v3/advertiser-lookup',
     :categories        => 'https://support-services.api.cj.com/v2/categories',
     :commissions       => 'https://commission-detail.api.cj.com/v3/commissions'
@@ -128,6 +129,41 @@ class CommissionJunction
     @cj_objects
   end
 
+  def link_search(params)
+    raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
+
+    unless params.size > 0
+      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
+    end
+
+    params['website-id'] = @website_id
+
+    @cj_objects = []
+
+    begin
+      response = self.class.get(WEB_SERVICE_URIS[:link_search], :query => params, :timeout => @timeout)
+
+      cj_api = response['cj_api']
+      error_message = cj_api['error_message']
+
+      raise ArgumentError, error_message if error_message
+
+      links = cj_api['links']
+
+      @total_matched = links['total_matched'].to_i
+      @records_returned = links['records_returned'].to_i
+      @page_number = links['page_number'].to_i
+
+      link = links['link']
+      link = [link] if link.is_a?(Hash) # If we got exactly one result, put it in an array.
+      link.each { |item| @cj_objects << Link.new(item) } if link
+    rescue Timeout::Error
+      @total_matched = @records_returned = @page_number = 0
+    end
+
+    @cj_objects
+  end
+
   def commissions(params = {})
     raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
 
@@ -177,6 +213,9 @@ class CommissionJunction
   end
 
   class Advertiser < CjObject
+  end
+
+  class Link < CjObject
   end
 
   class Commission < CjObject
