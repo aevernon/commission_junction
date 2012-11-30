@@ -54,6 +54,18 @@ cj.advertiser_lookup('keywords' => '+used +books',
   puts ''
 end
 
+# See http://help.cj.com/en/web_services/link_search_service_rest.htm
+# for the list of request and response parameters.
+cj.link_search('keywords' => '+used +books',
+               'advertiser-ids' => 'joined',
+               'records-per-page' => '5').each do |link|
+  puts link.link_id
+  puts link.link_name
+  puts link.link_code_html
+  puts link.sale_commission
+  puts ''
+end
+
 # See http://help.cj.com/en/web_services/support_services_rest.htm
 # for the list of request and response parameters.
 puts cj.categories
