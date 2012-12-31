@@ -218,7 +218,7 @@ class CommissionJunctionTest < Test::Unit::TestCase
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
     skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
-    
+
     credentials = YAML.load(File.read(key_file))
     cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
 
@@ -335,6 +335,53 @@ class CommissionJunctionTest < Test::Unit::TestCase
       assert_respond_to(commission, :order_discount)
       assert_respond_to(commission, :sid)
       assert_respond_to(commission, :sale_amount)
+    end
+  end
+
+  def test_link_search_live
+    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+
+    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
+
+    credentials = YAML.load(File.read(key_file))
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+
+    assert_nothing_raised do
+      cj.link_search('keywords' => '+blue +jeans', 'advertiser-ids' => 'joined')
+    end
+
+    check_link_search_results(cj)
+  end
+
+  def check_link_search_results(results)
+    assert_instance_of(Fixnum, results.total_matched)
+    assert_instance_of(Fixnum, results.records_returned)
+    assert_instance_of(Fixnum, results.page_number)
+    assert_instance_of(Array, results.cj_objects)
+
+    results.cj_objects.each do |link|
+      assert_instance_of(CommissionJunction::Link, link)
+      assert_respond_to(link, :advertiser_id)
+      assert_respond_to(link, :click_commission)
+      assert_respond_to(link, :creative_height)
+      assert_respond_to(link, :creative_width)
+      assert_respond_to(link, :lead_commission)
+      assert_respond_to(link, :link_code_html)
+      assert_respond_to(link, :link_code_javascript)
+      assert_respond_to(link, :destination)
+      assert_respond_to(link, :description)
+      assert_respond_to(link, :link_id)
+      assert_respond_to(link, :link_name)
+      assert_respond_to(link, :link_type)
+      assert_respond_to(link, :advertiser_name)
+      assert_respond_to(link, :performance_incentive)
+      assert_respond_to(link, :promotion_type)
+      assert_respond_to(link, :promotion_start_date)
+      assert_respond_to(link, :promotion_end_date)
+      assert_respond_to(link, :relationship_status)
+      assert_respond_to(link, :sale_commission)
+      assert_respond_to(link, :seven_day_epc)
+      assert_respond_to(link, :three_month_epc)
     end
   end
 end
