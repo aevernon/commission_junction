@@ -2,6 +2,8 @@
 
 Ruby wrapper for the Commission Junction web services APIs (REST)
 
+[![Gem Version](https://badge.fury.io/rb/commission_junction.png)](http://badge.fury.io/rb/commission_junction)
+
 ## Installation
 
 Add this line to your application's Gemfile:
