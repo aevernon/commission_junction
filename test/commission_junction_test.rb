@@ -1,44 +1,48 @@
 require 'test_helper'
 
-class CommissionJunctionTest < Test::Unit::TestCase
+class CommissionJunctionTest < Minitest::Test
+  def assert_nothing_raised(*)
+    yield
+  end
+
   def test_new_cj_with_no_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new
     end
   end
 
   def test_new_cj_with_one_param
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('fake')
     end
   end
 
   def test_new_cj_with_nil_param
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new(nil, 'website_id')
     end
 
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', nil)
     end
 
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id', nil)
     end
   end
 
   def test_new_cj_with_empty_param
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('', 'website_id')
     end
 
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', '')
     end
   end
 
   def test_new_cj_with_non_string_param
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new(123456, 'website_id')
     end
 
@@ -48,17 +52,17 @@ class CommissionJunctionTest < Test::Unit::TestCase
   end
 
   def test_new_cj_with_non_fixnum_timeout
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id', '10')
     end
   end
 
   def test_new_cj_with_non_positive_timeout
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id', 0)
     end
 
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id', -1)
     end
   end
@@ -74,31 +78,31 @@ class CommissionJunctionTest < Test::Unit::TestCase
   end
 
   def test_new_product_with_no_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction::Product.new
     end
   end
 
   def test_new_product_with_nil_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction::Product.new(nil)
     end
   end
 
   def test_new_product_with_empty_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction::Product.new({})
     end
   end
 
   def test_new_product_with_non_hash_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction::Product.new([1, 2, 3])
     end
   end
 
   def test_new_product_with_hash_params_and_non_string_keys
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction::Product.new(:name => 'blue jeans', :price => '49.95')
     end
   end
@@ -115,25 +119,25 @@ class CommissionJunctionTest < Test::Unit::TestCase
   end
 
   def test_product_search_with_no_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id').product_search
     end
   end
 
   def test_product_search_with_nil_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id').product_search(nil)
     end
   end
 
   def test_product_search_with_empty_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id').product_search({})
     end
   end
 
   def test_product_search_with_non_hash_params
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       CommissionJunction.new('developer_key', 'website_id').product_search([1, 2, 3])
     end
   end
@@ -141,7 +145,7 @@ class CommissionJunctionTest < Test::Unit::TestCase
   def test_product_search_with_bad_key
     cj = CommissionJunction.new('bad_key', 'website_id')
 
-    assert_raise ArgumentError do
+    assert_raises ArgumentError do
       cj.product_search('keywords' => '+some +product')
     end
   end
