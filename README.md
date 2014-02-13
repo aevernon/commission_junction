@@ -89,6 +89,7 @@ end
 ## Dependencies
 
 * httparty
+* ox
 
 ## Contributing
 
