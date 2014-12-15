@@ -2,21 +2,10 @@ require 'commission_junction/version'
 require 'ox'
 require 'httparty'
 
-# Silence peer certificate warnings from Net::HTTP.
-# Credit:  http://www.5dollarwhitebox.org/drupal/node/64
-class Net::HTTP
-  alias_method :old_initialize, :initialize
-
-  def initialize(*args)
-    old_initialize(*args)
-    @ssl_context = OpenSSL::SSL::SSLContext.new
-    @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  end
-end
-
 # Interact with CJ web services.
 class CommissionJunction
   include HTTParty
+  default_options.update(verify: false) # Skip SSL certificate verification.
   format(:xml)
   #debug_output $stderr
 
