@@ -45,13 +45,7 @@ class CommissionJunction
     params = {'locale' => 'en'}.merge(params)
 
     response = self.class.get(WEB_SERVICE_URIS[:categories], :query => params, :timeout => @timeout)
-
-    cj_api = response['cj_api']
-    error_message = cj_api['error_message']
-
-    raise ArgumentError, error_message if error_message
-
-    @categories = cj_api['categories']['category']
+    @categories = extract_contents(response, 'categories', 'category')
   end
 
   def advertiser_lookup(params = {})
@@ -63,12 +57,7 @@ class CommissionJunction
 
     begin
       response = self.class.get(WEB_SERVICE_URIS[:advertiser_lookup], :query => params)
-      cj_api = response['cj_api']
-      error_message = cj_api['error_message']
-
-      raise ArgumentError, error_message if error_message
-
-      advertisers = cj_api['advertisers']
+      advertisers = extract_contents(response, 'advertisers')
 
       @total_matched = advertisers['total_matched'].to_i
       @records_returned = advertisers['records_returned'].to_i
@@ -97,13 +86,7 @@ class CommissionJunction
 
     begin
       response = self.class.get(WEB_SERVICE_URIS[:product_search], :query => params, :timeout => @timeout)
-
-      cj_api = response['cj_api']
-      error_message = cj_api['error_message']
-
-      raise ArgumentError, error_message if error_message
-
-      products = cj_api['products']
+      products = extract_contents(response, 'products')
 
       @total_matched = products['total_matched'].to_i
       @records_returned = products['records_returned'].to_i
@@ -132,13 +115,7 @@ class CommissionJunction
 
     begin
       response = self.class.get(WEB_SERVICE_URIS[:link_search], :query => params, :timeout => @timeout)
-
-      cj_api = response['cj_api']
-      error_message = cj_api['error_message']
-
-      raise ArgumentError, error_message if error_message
-
-      links = cj_api['links']
+      links = extract_contents(response, 'links')
 
       @total_matched = links['total_matched'].to_i
       @records_returned = links['records_returned'].to_i
@@ -163,12 +140,7 @@ class CommissionJunction
 
     begin
       response = self.class.get(WEB_SERVICE_URIS[:commissions], :query => params)
-      cj_api = response['cj_api']
-      error_message = cj_api['error_message']
-
-      raise ArgumentError, error_message if error_message
-
-      commissions = cj_api['commissions']
+      commissions = extract_contents(response, 'commissions')
 
       @total_matched = commissions['total_matched'].to_i
       @records_returned = commissions['records_returned'].to_i
@@ -182,6 +154,19 @@ class CommissionJunction
     end
 
     @cj_objects
+  end
+
+  def extract_contents(response, first_level, second_level=nil)
+    cj_api = response['cj_api']
+
+    raise ArgumentError, "cj api missing from response" if cj_api.nil?
+
+    error_message = cj_api['error_message']
+
+    raise ArgumentError, error_message if error_message
+
+    return cj_api[first_level] if second_level.nil?
+    cj_api[first_level][second_level]
   end
 
   class CjObject
