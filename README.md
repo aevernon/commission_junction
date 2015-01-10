@@ -104,6 +104,7 @@ end
 * [Michael Nutt](https://github.com/mnutt)
 * [Jean-Sebastien Boulanger](https://github.com/jsboulanger)
 * [luckyjazzbo](https://github.com/luckyjazzbo)
+* [samsaradog](https://github.com/samsaradog)
 
 ## Copyright
 
