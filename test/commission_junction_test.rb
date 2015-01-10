@@ -388,4 +388,43 @@ class CommissionJunctionTest < Minitest::Test
       assert_respond_to(link, :three_month_epc)
     end
   end
+
+  def test_contents_extractor_with_first_level
+    contents = "abc"
+    response = {'cj_api' => {'first' => contents}}
+
+    cj = CommissionJunction.new('developer_key', 123456)
+
+    assert_equal(contents, cj.extract_contents(response, "first"))
+  end
+
+  def test_contents_extractor_with_second_level
+    contents = "abc"
+    response = {'cj_api' => {'first' => {'second' => contents}}}
+
+    cj = CommissionJunction.new('developer_key', 123456)
+
+    assert_equal(contents, cj.extract_contents(response, "first", "second"))
+  end
+
+  def test_contents_extractor_with_error_message
+    contents = "abc"
+    response = {'cj_api' => {'error_message' => contents}}
+
+    cj = CommissionJunction.new('developer_key', 123456)
+
+    assert_raises ArgumentError do
+      cj.extract_contents(response, "first")
+    end
+  end
+
+  def test_contents_extractor_with_no_cj_api
+    response = {}
+
+    cj = CommissionJunction.new('developer_key', 123456)
+
+    assert_raises ArgumentError do
+      cj.extract_contents(response, "first")
+    end
+  end
 end
