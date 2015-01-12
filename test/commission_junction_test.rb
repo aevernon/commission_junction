@@ -389,11 +389,15 @@ class CommissionJunctionTest < Minitest::Test
     end
   end
 
+  def set_up_service
+    CommissionJunction.new('developer_key', 123456)
+  end
+
   def test_contents_extractor_with_first_level
     contents = "abc"
     response = {'cj_api' => {'first' => contents}}
 
-    cj = CommissionJunction.new('developer_key', 123456)
+    cj = set_up_service
 
     assert_equal(contents, cj.extract_contents(response, "first"))
   end
@@ -402,7 +406,7 @@ class CommissionJunctionTest < Minitest::Test
     contents = "abc"
     response = {'cj_api' => {'first' => {'second' => contents}}}
 
-    cj = CommissionJunction.new('developer_key', 123456)
+    cj = set_up_service
 
     assert_equal(contents, cj.extract_contents(response, "first", "second"))
   end
@@ -411,7 +415,7 @@ class CommissionJunctionTest < Minitest::Test
     contents = "abc"
     response = {'cj_api' => {'error_message' => contents}}
 
-    cj = CommissionJunction.new('developer_key', 123456)
+    cj = set_up_service
 
     assert_raises ArgumentError do
       cj.extract_contents(response, "first")
@@ -421,10 +425,31 @@ class CommissionJunctionTest < Minitest::Test
   def test_contents_extractor_with_no_cj_api
     response = {}
 
-    cj = CommissionJunction.new('developer_key', 123456)
+    cj = set_up_service
 
     assert_raises ArgumentError do
       cj.extract_contents(response, "first")
     end
+  end
+
+  def set_up_cj_object
+    CommissionJunction::CjObject.new({"a" => "a"})
+  end
+
+  def test_key_conversion_with_spaces
+    cjo = set_up_cj_object
+
+    assert_equal("abc_def", cjo.clean_key_name("abc def"))
+  end
+
+  def test_key_conversion_with_trailing_spaces
+    cjo = set_up_cj_object
+
+    assert_equal("abcdef", cjo.clean_key_name("abcdef "))
+  end
+
+  def test_initializing_product_using_key_with_spaces
+    product = CommissionJunction::Product.new("abc def" => "123")
+    assert_equal(product.abc_def, "123")
   end
 end
