@@ -178,9 +178,14 @@ class CommissionJunction
       # Credit:  http://listlibrary.net/ruby-talk/2004/03/00sGI1cD
       params.each do |key, val|
         raise ArgumentError, "key must be a String; got #{key.class} instead" unless key.is_a?(String)
-        instance_variable_set("@#{key}".intern, val)
-        instance_eval %Q{ class << self ; attr_reader #{key.intern.inspect} ; end }
+        clean_key = clean_key_name(key)
+        instance_variable_set("@#{clean_key}".intern, val)
+        instance_eval %Q{ class << self ; attr_reader #{clean_key.intern.inspect} ; end }
       end
+    end
+
+    def clean_key_name(name)
+      name.strip.gsub(/\s/, '_')
     end
   end
 
