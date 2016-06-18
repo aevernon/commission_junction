@@ -77,7 +77,7 @@ class CommissionJunction
     raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
 
     unless params.size > 0
-      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
+      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee https://cjcommunity.force.com/s/article/4777185."
     end
 
     params['website-id'] = @website_id
@@ -106,7 +106,7 @@ class CommissionJunction
     raise ArgumentError, "params must be a Hash; got #{params.class} instead" unless params.is_a?(Hash)
 
     unless params.size > 0
-      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm"
+      raise ArgumentError, "You must provide at least one request parameter, for example, \"keywords\".\nSee https://cjcommunity.force.com/s/article/4777180."
     end
 
     params['website-id'] = @website_id

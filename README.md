@@ -24,15 +24,15 @@ Or install it yourself as:
 require 'rubygems'
 require 'commission_junction'
 
-# See https://api.cj.com/sign_up.cj
+# See https://api.cj.com/sign_up.cj.
 DEVELOPER_KEY = '????????'
 
-# See cj.com > Account > Web site Settings > PID
+# See cj.com > Account > Websites.
 WEBSITE_ID = '????????'
 
 cj = CommissionJunction.new(DEVELOPER_KEY, WEBSITE_ID)
 
-# See http://help.cj.com/en/web_services/product_catalog_search_service_rest.htm
+# See https://cjcommunity.force.com/s/article/4777185
 # for the list of request and response parameters.
 cj.product_search('keywords' => '+blue +jeans',
                   'advertiser-ids' => 'joined',
@@ -45,7 +45,7 @@ cj.product_search('keywords' => '+blue +jeans',
   puts ''
 end
 
-# See http://help.cj.com/en/web_services/advertiser_lookup_service_rest.htm
+# See https://cjcommunity.force.com/s/article/4777195
 # for the list of request and response parameters.
 cj.advertiser_lookup('keywords' => '+used +books',
                      'advertiser-ids' => 'joined',
@@ -56,7 +56,7 @@ cj.advertiser_lookup('keywords' => '+used +books',
   puts ''
 end
 
-# See http://help.cj.com/en/web_services/link_search_service_rest.htm
+# See https://cjcommunity.force.com/s/article/4777180
 # for the list of request and response parameters.
 cj.link_search('keywords' => '+used +books',
                'advertiser-ids' => 'joined',
@@ -68,11 +68,11 @@ cj.link_search('keywords' => '+used +books',
   puts ''
 end
 
-# See http://help.cj.com/en/web_services/support_services_rest.htm
+# See https://cjcommunity.force.com/s/article/4777190
 # for the list of request and response parameters.
 puts cj.categories
 
-# See http://help.cj.com/en/web_services/Commission_Detail_Service.htm
+# See https://cjcommunity.force.com/s/article/4777175
 # for the list of request and response parameters.
 cj.commissions.each do |commission|
   puts commission.action_type
