@@ -4,7 +4,7 @@ Ruby wrapper for the Commission Junction web services APIs (REST)
 
 See https://cjcommunity.force.com/s/article/4777058.
 
-[![Gem Version](https://badge.fury.io/rb/commission_junction.png)](http://badge.fury.io/rb/commission_junction)
+[![Gem Version](https://badge.fury.io/rb/commission_junction.svg)](https://badge.fury.io/rb/commission_junction)
 
 ## Installation
 
