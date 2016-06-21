@@ -23,7 +23,6 @@ Or install it yourself as:
 ## Example
 
 ```ruby
-require 'rubygems'
 require 'commission_junction'
 
 # See https://api.cj.com/sign_up.cj.
