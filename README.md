@@ -2,6 +2,8 @@
 
 Ruby wrapper for the Commission Junction web services APIs (REST)
 
+See https://cjcommunity.force.com/s/article/4777058.
+
 [![Gem Version](https://badge.fury.io/rb/commission_junction.png)](http://badge.fury.io/rb/commission_junction)
 
 ## Installation
@@ -74,7 +76,10 @@ puts cj.categories
 
 # See https://cjcommunity.force.com/s/article/4777175
 # for the list of request and response parameters.
+ids = []
+
 cj.commissions.each do |commission|
+  ids << commission.original_action_id
   puts commission.action_type
   puts commission.aid
   puts commission.commission_id
@@ -83,6 +88,26 @@ cj.commissions.each do |commission|
   puts commission.commission_amount
   puts commission.sid
   puts ''
+end
+
+# Each commission comes from the sale of one or more items.
+# Commissions and their items are linked by original_action_id.
+cj.item_detail(ids[0, 50]).each do |item_detail|
+  puts item_detail['original_action_id']
+
+  items = item_detail['item']
+  # If there is exactly one item, put it in an array.
+  items = [items] if items.is_a?(Hash)
+
+  items.each do |item|
+    puts item['sku']
+    puts item['quantity']
+    puts item['posting_date']
+    puts item['commission_id']
+    puts item['sale_amount']
+    puts item['discount']
+    puts item['publisher_commission']
+  end if items
 end
 ```
 

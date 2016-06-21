@@ -3,6 +3,7 @@ require 'ox'
 require 'httparty'
 
 # Interact with CJ web services.
+# See https://cjcommunity.force.com/s/article/4777058.
 class CommissionJunction
   include HTTParty
   default_options.update(verify: false) # Skip SSL certificate verification.
@@ -20,7 +21,8 @@ class CommissionJunction
     :link_search       => 'https://link-search.api.cj.com/v2/link-search',
     :advertiser_lookup => 'https://advertiser-lookup.api.cj.com/v3/advertiser-lookup',
     :categories        => 'https://support-services.api.cj.com/v2/categories',
-    :commissions       => 'https://commission-detail.api.cj.com/v3/commissions'
+    :commissions       => 'https://commission-detail.api.cj.com/v3/commissions',
+    :item_detail       => 'https://commission-detail.api.cj.com/v3/item-detail/'
   }
 
   def initialize(developer_key, website_id, timeout = 10)
@@ -149,6 +151,27 @@ class CommissionJunction
       commission = commissions['commission']
       commission = [commission] if commission.is_a?(Hash) # If we got exactly one result, put it in an array.
       commission.each { |item| @cj_objects << Commission.new(item) } if commission
+    rescue Timeout::Error
+      @total_matched = @records_returned = @page_number = 0
+    end
+
+    @cj_objects
+  end
+
+  def item_detail(original_action_ids)
+    raise ArgumentError, "original_action_ids must be an Array; got #{original_action_ids.class} instead" unless original_action_ids.is_a?(Array)
+
+    unless (1..50).include?(original_action_ids.size)
+      raise ArgumentError, "You must provide between 1 and 50 original action IDs.\nSee https://cjcommunity.force.com/s/article/4777175."
+    end
+
+    @cj_objects = []
+
+    begin
+      ids = original_action_ids.join(',')
+      response = self.class.get(WEB_SERVICE_URIS[:item_detail] + ids, :query => "original-action-id=#{ids}")
+      @cj_objects = extract_contents(response, 'item_details')
+      @cj_objects = [@cj_objects] if @cj_objects.is_a?(Hash) # If we got exactly one result, put it in an array.
     rescue Timeout::Error
       @total_matched = @records_returned = @page_number = 0
     end

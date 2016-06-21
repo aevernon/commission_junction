@@ -342,6 +342,81 @@ class CommissionJunctionTest < Minitest::Test
     end
   end
 
+  def test_item_detail_with_no_params
+    assert_raises ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id').item_detail
+    end
+  end
+
+  def test_item_detail_with_nil_params
+    assert_raises ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id').item_detail(nil)
+    end
+  end
+
+  def test_item_detail_with_too_few_ids
+    assert_raises ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id').item_detail([])
+    end
+  end
+
+  def test_item_detail_with_too_many_ids
+    assert_raises ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id').item_detail(Array.new(51))
+    end
+  end
+
+  def test_item_detail_with_non_array_params
+    assert_raises ArgumentError do
+      CommissionJunction.new('developer_key', 'website_id').item_detail('string')
+    end
+  end
+
+  def test_item_detail_live
+    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+
+    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
+
+    credentials = YAML.load(File.read(key_file))
+    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    ids = []
+
+    cj.commissions.each do |commission|
+      ids << commission.original_action_id
+    end
+
+    skip "Skipping live testing of item_detail because there are no original action IDs in your account." unless ids.size > 0
+
+    assert_nothing_raised do
+      cj.item_detail(ids[0, 1])
+      check_item_detail_results(cj)
+      cj.item_detail(ids[0, 2])
+      check_item_detail_results(cj)
+    end
+  end
+
+  def check_item_detail_results(results)
+    assert_instance_of(Array, results.cj_objects)
+
+    results.cj_objects.each do |item_detail|
+      assert_instance_of(Hash, item_detail)
+      assert item_detail.has_key?('original_action_id')
+      assert item_detail.has_key?('item')
+
+      item = item_detail['item']
+      item = item.first if item.is_a?(Array)
+
+      assert item.has_key?('sku')
+      assert item.has_key?('quantity')
+      assert item.has_key?('posting_date')
+      assert item.has_key?('commission_id')
+      assert item.has_key?('sale_amount')
+      assert item.has_key?('discount')
+      assert item.has_key?('publisher_commission')
+
+    end
+  end
+
   def test_link_search_live
     key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
 
