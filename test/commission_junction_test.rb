@@ -43,11 +43,11 @@ class CommissionJunctionTest < Minitest::Test
 
   def test_new_cj_with_non_string_param
     assert_raises ArgumentError do
-      CommissionJunction.new(123456, 'website_id')
+      CommissionJunction.new(123_456, 'website_id')
     end
 
     assert_nothing_raised ArgumentError do
-      CommissionJunction.new('developer_key', 123456)
+      CommissionJunction.new('developer_key', 123_456)
     end
   end
 
@@ -103,7 +103,7 @@ class CommissionJunctionTest < Minitest::Test
 
   def test_new_product_with_hash_params_and_non_string_keys
     assert_raises ArgumentError do
-      CommissionJunction::Product.new(:name => 'blue jeans', :price => '49.95')
+      CommissionJunction::Product.new(name: 'blue jeans', price: '49.95')
     end
   end
 
@@ -284,7 +284,7 @@ class CommissionJunctionTest < Minitest::Test
 
     cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
-    assert cj.categories.size > 0
+    assert !cj.categories.empty?
   end
 
   def test_commissions_live
@@ -381,7 +381,7 @@ class CommissionJunctionTest < Minitest::Test
       ids << commission.original_action_id
     end
 
-    skip "Skipping live testing of item_detail because there are no original action IDs in your account." unless ids.size > 0
+    skip 'Skipping live testing of item_detail because there are no original action IDs in your account.' if ids.empty?
 
     assert_nothing_raised do
       cj.item_detail(ids[0, 1])
@@ -396,20 +396,19 @@ class CommissionJunctionTest < Minitest::Test
 
     results.cj_objects.each do |item_detail|
       assert_instance_of(Hash, item_detail)
-      assert item_detail.has_key?('original_action_id')
-      assert item_detail.has_key?('item')
+      assert item_detail.key?('original_action_id')
+      assert item_detail.key?('item')
 
       item = item_detail['item']
       item = item.first if item.is_a?(Array)
 
-      assert item.has_key?('sku')
-      assert item.has_key?('quantity')
-      assert item.has_key?('posting_date')
-      assert item.has_key?('commission_id')
-      assert item.has_key?('sale_amount')
-      assert item.has_key?('discount')
-      assert item.has_key?('publisher_commission')
-
+      assert item.key?('sku')
+      assert item.key?('quantity')
+      assert item.key?('posting_date')
+      assert item.key?('commission_id')
+      assert item.key?('sale_amount')
+      assert item.key?('discount')
+      assert item.key?('publisher_commission')
     end
   end
 
@@ -460,35 +459,35 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def set_up_service
-    CommissionJunction.new('developer_key', 123456)
+    CommissionJunction.new('developer_key', 123_456)
   end
 
   def test_contents_extractor_with_first_level
-    contents = "abc"
-    response = {'cj_api' => {'first' => contents}}
+    contents = 'abc'
+    response = { 'cj_api' => { 'first' => contents } }
 
     cj = set_up_service
 
-    assert_equal(contents, cj.extract_contents(response, "first"))
+    assert_equal(contents, cj.extract_contents(response, 'first'))
   end
 
   def test_contents_extractor_with_second_level
-    contents = "abc"
-    response = {'cj_api' => {'first' => {'second' => contents}}}
+    contents = 'abc'
+    response = { 'cj_api' => { 'first' => { 'second' => contents } } }
 
     cj = set_up_service
 
-    assert_equal(contents, cj.extract_contents(response, "first", "second"))
+    assert_equal(contents, cj.extract_contents(response, 'first', 'second'))
   end
 
   def test_contents_extractor_with_error_message
-    contents = "abc"
-    response = {'cj_api' => {'error_message' => contents}}
+    contents = 'abc'
+    response = { 'cj_api' => { 'error_message' => contents } }
 
     cj = set_up_service
 
     assert_raises ArgumentError do
-      cj.extract_contents(response, "first")
+      cj.extract_contents(response, 'first')
     end
   end
 
@@ -498,28 +497,28 @@ class CommissionJunctionTest < Minitest::Test
     cj = set_up_service
 
     assert_raises ArgumentError do
-      cj.extract_contents(response, "first")
+      cj.extract_contents(response, 'first')
     end
   end
 
   def set_up_cj_object
-    CommissionJunction::CjObject.new({"a" => "a"})
+    CommissionJunction::CjObject.new('a' => 'a')
   end
 
   def test_key_conversion_with_spaces
     cjo = set_up_cj_object
 
-    assert_equal("abc_def", cjo.clean_key_name("abc def"))
+    assert_equal('abc_def', cjo.clean_key_name('abc def'))
   end
 
   def test_key_conversion_with_trailing_spaces
     cjo = set_up_cj_object
 
-    assert_equal("abcdef", cjo.clean_key_name("abcdef "))
+    assert_equal('abcdef', cjo.clean_key_name('abcdef '))
   end
 
   def test_initializing_product_using_key_with_spaces
-    product = CommissionJunction::Product.new("abc def" => "123")
-    assert_equal(product.abc_def, "123")
+    product = CommissionJunction::Product.new('abc def' => '123')
+    assert_equal(product.abc_def, '123')
   end
 end

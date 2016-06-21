@@ -26,10 +26,10 @@ Or install it yourself as:
 require 'commission_junction'
 
 # See https://api.cj.com/sign_up.cj.
-DEVELOPER_KEY = '????????'
+DEVELOPER_KEY = '????????'.freeze
 
 # See cj.com > Account > Websites.
-WEBSITE_ID = '????????'
+WEBSITE_ID = '????????'.freeze
 
 cj = CommissionJunction.new(DEVELOPER_KEY, WEBSITE_ID)
 
