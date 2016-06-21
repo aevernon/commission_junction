@@ -151,12 +151,11 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def test_product_search_with_keywords_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+    unless ENV['CJ_DEVELOPER_KEY'] && ENV['CJ_WEBSITE_ID']
+      skip 'Skipping live testing because environment variables CJ_DEVELOPER_KEY and CJ_WEBSITE_ID are not set.'
+    end
 
-    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
-
-    credentials = YAML.load(File.read(key_file))
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
     # Zero results
     assert_nothing_raised do
@@ -180,7 +179,7 @@ class CommissionJunctionTest < Minitest::Test
     check_search_results(cj)
 
     # Short timeout
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'], 1)
 
     assert_nothing_raised do
       cj.product_search('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
@@ -219,12 +218,11 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def test_advertiser_lookup_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+    unless ENV['CJ_DEVELOPER_KEY'] && ENV['CJ_WEBSITE_ID']
+      skip 'Skipping live testing because environment variables CJ_DEVELOPER_KEY and CJ_WEBSITE_ID are not set.'
+    end
 
-    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
-
-    credentials = YAML.load(File.read(key_file))
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
     # Use default lookup parameters.
     assert_nothing_raised do
@@ -248,7 +246,7 @@ class CommissionJunctionTest < Minitest::Test
     check_advertiser_lookup_results(cj)
 
     # Short timeout
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'], 1)
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'], 1)
 
     assert_nothing_raised do
       cj.advertiser_lookup('keywords' => 'One Great Blue Jean~No Limits', 'records-per-page' => '1')
@@ -280,23 +278,21 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def test_categories_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+    unless ENV['CJ_DEVELOPER_KEY'] && ENV['CJ_WEBSITE_ID']
+      skip 'Skipping live testing because environment variables CJ_DEVELOPER_KEY and CJ_WEBSITE_ID are not set.'
+    end
 
-    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
-
-    credentials = YAML.load(File.read(key_file))
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
     assert cj.categories.size > 0
   end
 
   def test_commissions_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+    unless ENV['CJ_DEVELOPER_KEY'] && ENV['CJ_WEBSITE_ID']
+      skip 'Skipping live testing because environment variables CJ_DEVELOPER_KEY and CJ_WEBSITE_ID are not set.'
+    end
 
-    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
-
-    credentials = YAML.load(File.read(key_file))
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
     assert_nothing_raised do
       cj.commissions
@@ -373,12 +369,12 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def test_item_detail_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+    unless ENV['CJ_DEVELOPER_KEY'] && ENV['CJ_WEBSITE_ID']
+      skip 'Skipping live testing because environment variables CJ_DEVELOPER_KEY and CJ_WEBSITE_ID are not set.'
+    end
 
-    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
-    credentials = YAML.load(File.read(key_file))
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
     ids = []
 
     cj.commissions.each do |commission|
@@ -418,12 +414,11 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def test_link_search_live
-    key_file = File.join(ENV['HOME'], '.commission_junction.yaml')
+    unless ENV['CJ_DEVELOPER_KEY'] && ENV['CJ_WEBSITE_ID']
+      skip 'Skipping live testing because environment variables CJ_DEVELOPER_KEY and CJ_WEBSITE_ID are not set.'
+    end
 
-    skip "#{key_file} does not exist. Put your CJ developer key and website ID in there to enable live testing." unless File.exist?(key_file)
-
-    credentials = YAML.load(File.read(key_file))
-    cj = CommissionJunction.new(credentials['developer_key'], credentials['website_id'])
+    cj = CommissionJunction.new(ENV['CJ_DEVELOPER_KEY'], ENV['CJ_WEBSITE_ID'])
 
     assert_nothing_raised do
       cj.link_search('keywords' => '+blue +jeans', 'advertiser-ids' => 'joined')
