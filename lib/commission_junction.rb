@@ -57,20 +57,16 @@ class CommissionJunction
 
     @cj_objects = []
 
-    begin
-      response = self.class.get(WEB_SERVICE_URIS[:advertiser_lookup], query: params)
-      advertisers = extract_contents(response, 'advertisers')
+    response = self.class.get(WEB_SERVICE_URIS[:advertiser_lookup], query: params)
+    advertisers = extract_contents(response, 'advertisers')
 
-      @total_matched = advertisers['total_matched'].to_i
-      @records_returned = advertisers['records_returned'].to_i
-      @page_number = advertisers['page_number'].to_i
+    @total_matched = advertisers['total_matched'].to_i
+    @records_returned = advertisers['records_returned'].to_i
+    @page_number = advertisers['page_number'].to_i
 
-      advertiser = advertisers['advertiser']
-      advertiser = [advertiser] if advertiser.is_a?(Hash) # If we got exactly one result, put it in an array.
-      advertiser.each { |item| @cj_objects << Advertiser.new(item) } if advertiser
-    rescue Timeout::Error
-      @total_matched = @records_returned = @page_number = 0
-    end
+    advertiser = advertisers['advertiser']
+    advertiser = [advertiser] if advertiser.is_a?(Hash) # If we got exactly one result, put it in an array.
+    advertiser.each { |item| @cj_objects << Advertiser.new(item) } if advertiser
 
     @cj_objects
   end
@@ -86,20 +82,16 @@ class CommissionJunction
 
     @cj_objects = []
 
-    begin
-      response = self.class.get(WEB_SERVICE_URIS[:product_search], query: params, timeout: @timeout)
-      products = extract_contents(response, 'products')
+    response = self.class.get(WEB_SERVICE_URIS[:product_search], query: params, timeout: @timeout)
+    products = extract_contents(response, 'products')
 
-      @total_matched = products['total_matched'].to_i
-      @records_returned = products['records_returned'].to_i
-      @page_number = products['page_number'].to_i
+    @total_matched = products['total_matched'].to_i
+    @records_returned = products['records_returned'].to_i
+    @page_number = products['page_number'].to_i
 
-      product = products['product']
-      product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
-      product.each { |item| @cj_objects << Product.new(item) } if product
-    rescue Timeout::Error
-      @total_matched = @records_returned = @page_number = 0
-    end
+    product = products['product']
+    product = [product] if product.is_a?(Hash) # If we got exactly one result, put it in an array.
+    product.each { |item| @cj_objects << Product.new(item) } if product
 
     @cj_objects
   end
@@ -115,20 +107,16 @@ class CommissionJunction
 
     @cj_objects = []
 
-    begin
-      response = self.class.get(WEB_SERVICE_URIS[:link_search], query: params, timeout: @timeout)
-      links = extract_contents(response, 'links')
+    response = self.class.get(WEB_SERVICE_URIS[:link_search], query: params, timeout: @timeout)
+    links = extract_contents(response, 'links')
 
-      @total_matched = links['total_matched'].to_i
-      @records_returned = links['records_returned'].to_i
-      @page_number = links['page_number'].to_i
+    @total_matched = links['total_matched'].to_i
+    @records_returned = links['records_returned'].to_i
+    @page_number = links['page_number'].to_i
 
-      link = links['link']
-      link = [link] if link.is_a?(Hash) # If we got exactly one result, put it in an array.
-      link.each { |item| @cj_objects << Link.new(item) } if link
-    rescue Timeout::Error
-      @total_matched = @records_returned = @page_number = 0
-    end
+    link = links['link']
+    link = [link] if link.is_a?(Hash) # If we got exactly one result, put it in an array.
+    link.each { |item| @cj_objects << Link.new(item) } if link
 
     @cj_objects
   end
@@ -140,20 +128,16 @@ class CommissionJunction
 
     @cj_objects = []
 
-    begin
-      response = self.class.get(WEB_SERVICE_URIS[:commissions], query: params)
-      commissions = extract_contents(response, 'commissions')
+    response = self.class.get(WEB_SERVICE_URIS[:commissions], query: params)
+    commissions = extract_contents(response, 'commissions')
 
-      @total_matched = commissions['total_matched'].to_i
-      @records_returned = commissions['records_returned'].to_i
-      @page_number = commissions['page_number'].to_i
+    @total_matched = commissions['total_matched'].to_i
+    @records_returned = commissions['records_returned'].to_i
+    @page_number = commissions['page_number'].to_i
 
-      commission = commissions['commission']
-      commission = [commission] if commission.is_a?(Hash) # If we got exactly one result, put it in an array.
-      commission.each { |item| @cj_objects << Commission.new(item) } if commission
-    rescue Timeout::Error
-      @total_matched = @records_returned = @page_number = 0
-    end
+    commission = commissions['commission']
+    commission = [commission] if commission.is_a?(Hash) # If we got exactly one result, put it in an array.
+    commission.each { |item| @cj_objects << Commission.new(item) } if commission
 
     @cj_objects
   end
@@ -167,14 +151,10 @@ class CommissionJunction
 
     @cj_objects = []
 
-    begin
-      ids = original_action_ids.join(',')
-      response = self.class.get(WEB_SERVICE_URIS[:item_detail] + ids, query: "original-action-id=#{ids}")
-      @cj_objects = extract_contents(response, 'item_details')
-      @cj_objects = [@cj_objects] if @cj_objects.is_a?(Hash) # If we got exactly one result, put it in an array.
-    rescue Timeout::Error
-      @total_matched = @records_returned = @page_number = 0
-    end
+    ids = original_action_ids.join(',')
+    response = self.class.get(WEB_SERVICE_URIS[:item_detail] + ids, query: "original-action-id=#{ids}")
+    @cj_objects = extract_contents(response, 'item_details')
+    @cj_objects = [@cj_objects] if @cj_objects.is_a?(Hash) # If we got exactly one result, put it in an array.
 
     @cj_objects
   end
