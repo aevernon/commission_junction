@@ -33,7 +33,7 @@ class CommissionJunction
     raise ArgumentError, "You must supply your website ID.\nSee cj.com > Account > Web site Settings > PID" if website_id.empty?
     @website_id = website_id
 
-    raise ArgumentError, "timeout must be a Fixnum; got #{timeout.class} instead" unless timeout.is_a?(Fixnum)
+    raise ArgumentError, "timeout must be a Integer; got #{timeout.class} instead" unless timeout.is_a?(Integer)
     raise ArgumentError, "timeout must be > 0; got #{timeout} instead" unless timeout > 0
     @timeout = timeout
 
