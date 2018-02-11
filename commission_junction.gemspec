@@ -17,7 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
   gem.add_dependency 'httparty', '~> 0.13'
-  gem.add_development_dependency 'minitest', '~> 0'
+  gem.add_development_dependency 'minitest', '> 0'
   gem.add_dependency 'ox', '~> 2.1'
   gem.license = 'BSD-3-Clause'
 end
