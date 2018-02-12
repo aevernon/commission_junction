@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'commission_junction/version'
@@ -18,8 +17,8 @@ Gem::Specification.new do |gem|
   gem.require_paths = ['lib']
   gem.add_dependency 'httparty', '~> 0.15'
   gem.add_dependency 'ox', '~> 2.8'
-  gem.add_development_dependency 'minitest', '> 0'
   gem.add_development_dependency 'json', '~> 2.1'
+  gem.add_development_dependency 'minitest', '> 0'
   gem.license = 'BSD-3-Clause'
-  gem.required_ruby_version = '~> 2.0'
+  gem.required_ruby_version = '~> 2.1'
 end
