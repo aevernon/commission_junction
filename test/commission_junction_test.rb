@@ -189,9 +189,9 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def check_search_results(results)
-    assert_instance_of(Fixnum, results.total_matched)
-    assert_instance_of(Fixnum, results.records_returned)
-    assert_instance_of(Fixnum, results.page_number)
+    assert_instance_of(Integer, results.total_matched)
+    assert_instance_of(Integer, results.records_returned)
+    assert_instance_of(Integer, results.page_number)
     assert_instance_of(Array, results.cj_objects)
 
     results.cj_objects.each do |product|
@@ -256,9 +256,9 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def check_advertiser_lookup_results(results)
-    assert_instance_of(Fixnum, results.total_matched)
-    assert_instance_of(Fixnum, results.records_returned)
-    assert_instance_of(Fixnum, results.page_number)
+    assert_instance_of(Integer, results.total_matched)
+    assert_instance_of(Integer, results.records_returned)
+    assert_instance_of(Integer, results.page_number)
     assert_instance_of(Array, results.cj_objects)
 
     results.cj_objects.each do |advertiser|
@@ -308,9 +308,9 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def check_commission_lookup_results(results)
-    assert_instance_of(Fixnum, results.total_matched)
-    assert_instance_of(Fixnum, results.records_returned)
-    assert_instance_of(Fixnum, results.page_number)
+    assert_instance_of(Integer, results.total_matched)
+    assert_instance_of(Integer, results.records_returned)
+    assert_instance_of(Integer, results.page_number)
     assert_instance_of(Array, results.cj_objects)
 
     results.cj_objects.each do |commission|
@@ -427,9 +427,9 @@ class CommissionJunctionTest < Minitest::Test
   end
 
   def check_link_search_results(results)
-    assert_instance_of(Fixnum, results.total_matched)
-    assert_instance_of(Fixnum, results.records_returned)
-    assert_instance_of(Fixnum, results.page_number)
+    assert_instance_of(Integer, results.total_matched)
+    assert_instance_of(Integer, results.records_returned)
+    assert_instance_of(Integer, results.page_number)
     assert_instance_of(Array, results.cj_objects)
 
     results.cj_objects.each do |link|
