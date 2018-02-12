@@ -162,9 +162,9 @@ class CommissionJunction
   def extract_contents(response, first_level, second_level = nil)
     cj_api = response['cj_api']
 
-    raise ArgumentError, 'cj api missing from response' if cj_api.blank?
+    raise ArgumentError, 'cj api missing from response' if cj_api.nil?
 
-    error_message = cj_api['error_message'].presence
+    error_message = cj_api['error_message']
 
     raise ArgumentError, error_message if error_message
 
