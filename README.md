@@ -128,8 +128,9 @@ end
 * [Michael Nutt](https://github.com/mnutt)
 * [Jean-Sebastien Boulanger](https://github.com/jsboulanger)
 * [luckyjazzbo](https://github.com/luckyjazzbo)
-* [samsaradog](https://github.com/samsaradog)
+* [Will Warner](https://github.com/samsaradog)
 * [Sergii Konev](https://github.com/K-S-A)
+* [vemv](https://github.com/vemv)
 
 ## Copyright
 

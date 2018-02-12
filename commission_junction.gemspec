@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'httparty', '~> 0.15'
   gem.add_dependency 'ox', '~> 2.8'
   gem.add_development_dependency 'json', '~> 2.1'
-  gem.add_development_dependency 'minitest', '> 0'
+  gem.add_development_dependency 'minitest', '~> 5'
   gem.license = 'BSD-3-Clause'
   gem.required_ruby_version = '~> 2.1'
 end
