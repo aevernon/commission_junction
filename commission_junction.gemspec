@@ -21,4 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'minitest', '> 0'
   gem.add_development_dependency 'json', '~> 2.1'
   gem.license = 'BSD-3-Clause'
+  gem.required_ruby_version = '~> 2.0'
 end
