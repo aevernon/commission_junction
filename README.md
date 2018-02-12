@@ -129,6 +129,7 @@ end
 * [Jean-Sebastien Boulanger](https://github.com/jsboulanger)
 * [luckyjazzbo](https://github.com/luckyjazzbo)
 * [samsaradog](https://github.com/samsaradog)
+* [Sergii Konev](https://github.com/K-S-A)
 
 ## Copyright
 
