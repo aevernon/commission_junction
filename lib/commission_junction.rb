@@ -38,7 +38,7 @@ class CommissionJunction
     @timeout = timeout
 
     self_class = self.class
-    self_class.headers('authorization' => developer_key)
+    self_class.headers('authorization' => "Bearer #{developer_key}")
   end
 
   def categories(params = {})
