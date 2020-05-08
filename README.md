@@ -1,3 +1,9 @@
+# Archived project. No maintenance.
+
+This project is not maintained anymore and is archived. Feel free to fork and make your own changes if needed.
+
+Thanks to everyone for your valuable feedback and contributions.
+
 # commission_junction
 
 Ruby wrapper for the Commission Junction web services APIs (REST)
@@ -114,12 +120,6 @@ end
 
 * httparty
 * ox
-
-## Contributing
-
-* Feel free to file a bug report or enhancement request, even if you don't have time to submit a patch.
-* Please try to include a test for any patch you submit. If you don't include a test, I'll have to write one, and it'll take longer to get your code in.
-* Remember to send me a pull request.
 
 ## Authors
 
